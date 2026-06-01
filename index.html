@@ -12,14 +12,20 @@
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
-    <div class="NextTrain">
-        <h1>Next Arriving</h1>
-        <div class="arrivals" id="arrivals"></div>
+    <div class="container">
+        <div class="next-train">
+            <h1>Next Arriving</h1>
+            <div class="arrivals" id="arrivals"></div>
+        </div>
+        <div id="map"></div>
     </div>
-    <div id="map" style="width: 600px; height: 400px;"></div>
     <script src="script.js"></script>
 </body>
 </html>

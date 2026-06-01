@@ -1,6 +1,15 @@
 const geojsonPath = 'data.geojson';
 
-const map = L.map('map').setView([44.95, -93.25], 10);
+const map = L.map('map', {
+    dragging: false,       // Disables panning/dragging
+    touchZoom: false,      // Disables pinch-to-zoom (mobile)
+    scrollWheelZoom: false,// Disables scroll-to-zoom
+    doubleClickZoom: false,// Disables double-click-to-zoom
+    boxZoom: false,        // Disables shift-drag box zoom
+    keyboard: false,        // Disables keyboard panning
+    zoomControl: false,     // Disables the zoom control UI
+    attributionControl: false // Disables the attribution control
+}).setView([44.92, -93.182], 12);
 
 const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -22,18 +31,34 @@ async function getArrivals(route,direction,place) {
         for (let i = 0; i < 3 && i < result.departures.length; i++) {
             console.log(result)
             console.log(result.departures[i].route_short_name, result.departures[i].description, result.departures[i].departure_text);
-                const arrivalLine = document.createElement('p');
-                const arrivalData = document.createTextNode(`${result.departures[i].route_short_name} - ${result.departures[i].description} - ${result.departures[i].departure_text}`);
-                arrivalLine.appendChild(arrivalData);
-                document.querySelector('.arrivals').appendChild(arrivalLine);
+                // Create elements for the arrival card
+                const arrivalCard = document.createElement('div');
+                const arrivalText = document.createElement('p');
+                const arrivalDescription = document.createElement('p');
+                const arrivalTime = document.createElement('p');
+
+                // Set the text content for each element
+                const routeText = document.createTextNode(result.departures[i].route_short_name);
+                const descriptionText = document.createTextNode(result.departures[i].description);
+                const timeText = document.createTextNode(result.departures[i].departure_text);
+
+                // Append the text nodes to the respective elements
+                arrivalText.appendChild(routeText);
+                arrivalDescription.appendChild(descriptionText);
+                arrivalTime.appendChild(timeText);
+
+                // Append the elements to the arrival card and add a class for styling
+                arrivalCard.classList.add('arrival-card');
+                arrivalCard.appendChild(arrivalText);
+                arrivalCard.appendChild(arrivalDescription);
+                arrivalCard.appendChild(arrivalTime);
+
+                document.querySelector('.arrivals').appendChild(arrivalCard);
         };
     } catch (error) {
         console.error(error.message);
     }
 }
-
-getArrivals(901, 1, "38HI");
-getArrivals(901, 0, "38HI");
 
 //Initialize Layer Groups
 var routeLayer = L.layerGroup().addTo(map);
@@ -114,17 +139,21 @@ async function getVehicleData(routeId) {
     }
 }
 
-getVehicleData(901);
-getVehicleData(902);
+refresh();
 
 function refresh() {
     console.log("Refreshing...");
     const arrivals = document.getElementById("arrivals");
     arrivals.replaceChildren();
-    getArrivals(901, 1, "38HI");
-    getArrivals(901, 0, "38HI");
-    vehicleLayer.clearLayers();
+    getArrivals(991, 1, "38HI");
+    getArrivals(991, 0, "38HI");
+    try {
+        vehicleLayer.clearLayers();
+    } catch (error) {
+        console.error(error.message);
+    }
     getVehicleData(901);
+    getVehicleData(991);
     getVehicleData(902);
 }
 
